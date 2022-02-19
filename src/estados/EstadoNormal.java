@@ -7,8 +7,8 @@ public class EstadoNormal extends Estado {
 	
 	public EstadoNormal(Personagem personagem) {
 		super(personagem);
-		this.getPersonagem().setAtaque(new AtaqueMedio());
-		this.getPersonagem().setCorrida(new CorridaMedia());
+		this.getPersonagem().setAtaque(AtaqueMedio.getInstancia());
+		this.getPersonagem().setCorrida(CorridaMedia.getInstancia());
 	}
 
 	

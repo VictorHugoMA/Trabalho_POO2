@@ -14,6 +14,9 @@ public class Jogador extends Personagem {
 	public Jogador(int x, int y , boolean escudo) {
 		super(x,y, escudo);
 	}
+	public Jogador() {
+		
+	}
 	
 	public void atacar2D(Inimigo inimigo) {
 		if((Math.abs(this.getX() - inimigo.getX()) <=15) && (Math.abs(this.getY() - inimigo.getY()) <=15) ){  // <=15 para facilitar o acerto

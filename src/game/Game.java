@@ -10,15 +10,16 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import fabrica.AdvancedJogadorFactory;
 import personagens.*;
 import poderes.*;
 
-public class Game extends JPanel {
+public abstract class Game extends JPanel {
 
     private Jogador jogador;
-    private InimigoArauto inimigoArauto;
-    private InimigoBeholder inimigoBeholder;
-    private InimigoEstirge inimigoEstirge;
+    private Inimigo inimigoArauto;
+    private Inimigo inimigoBeholder;
+    private Inimigo inimigoEstirge;
     private BufferedImage imagemJogador ,imagemInimigoArauto, imagemInimigoBeholder, imagemInimigoEstirge;
     private int atacouFlag = 0;
 
@@ -35,7 +36,10 @@ public class Game extends JPanel {
         catch (Exception e) {
 			e.printStackTrace();
 		}
-    }       
+    }    
+    
+    public abstract Jogador criarPersonagem();
+    public abstract Inimigo criarInimigo(int tipo, int x, int y);
     
     public class MyKeyListener implements KeyListener {
         @Override
@@ -118,18 +122,17 @@ public class Game extends JPanel {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         
-        jogador = new Jogador(250,250, true);
-        inimigoArauto = new InimigoArauto(10,450);
-        inimigoBeholder = new InimigoBeholder(300,50);
-        inimigoEstirge = new InimigoEstirge(450,250);
+        jogador = this.criarPersonagem();
+        inimigoArauto = this.criarInimigo(1, 10, 450);
+        inimigoBeholder = this.criarInimigo(2, 300,50);
+        inimigoEstirge = this.criarInimigo(3, 450,250);
 
         
         jogador.addObserver(inimigoArauto);
         jogador.addObserver(inimigoBeholder);
         jogador.addObserver(inimigoEstirge);
         
-        jogador.setAtaque(new Eletrico(jogador.getAtaque())); //adiciona poderes no ataque do jogador
-        jogador.setAtaque(new Chamas(jogador.getAtaque()));
+
       
         
         while (jogador.getLife()!=0) {

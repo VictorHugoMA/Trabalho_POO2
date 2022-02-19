@@ -5,7 +5,7 @@ import comportamentos.*;
 public class TestePoder {
 
 	public static void main(String[] args) {
-		Ataque af = new AtaqueForte();
+		Ataque af = AtaqueForte.getInstancia();
 		System.out.println(af.atacar());
 
 		af = new Chamas(af);

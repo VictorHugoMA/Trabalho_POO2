@@ -7,8 +7,8 @@ public class EstadoForte extends Estado {
 	
 	public EstadoForte(Personagem personagem) {
 		super(personagem);
-		this.getPersonagem().setAtaque(new AtaqueForte());
-		this.getPersonagem().setCorrida(new CorridaRapida());
+		this.getPersonagem().setAtaque(AtaqueForte.getInstancia());
+		this.getPersonagem().setCorrida(CorridaRapida.getInstancia());
 	}
 
 	

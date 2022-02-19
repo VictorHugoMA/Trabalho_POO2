@@ -7,8 +7,8 @@ public class EstadoPerigo extends Estado {
 	
 	public EstadoPerigo(Personagem personagem) {
 		super(personagem);
-		this.getPersonagem().setAtaque(new AtaqueFraco());
-		this.getPersonagem().setCorrida(new CorridaDevagar());
+		this.getPersonagem().setAtaque(AtaqueFraco.getInstancia());
+		this.getPersonagem().setCorrida(CorridaDevagar.getInstancia());
 	}
 
 	protected void setLimites() {
