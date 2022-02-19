@@ -8,3 +8,6 @@ Utilizando vários Padrões de Projeto, são eles:
 - Observer
 - Chain of Responsibility
 - Decorator
+- Factory Method
+- Abstract Factory
+- Singleton
