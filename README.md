@@ -11,3 +11,4 @@ Utilizando vários Padrões de Projeto, são eles:
 - Factory Method
 - Abstract Factory
 - Singleton
+- Composite
