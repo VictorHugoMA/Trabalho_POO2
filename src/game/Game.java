@@ -5,14 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.util.Observer;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import fabrica.AdvancedJogadorFactory;
 import personagens.*;
-import poderes.*;
+import fases.*;
 
 public abstract class Game extends JPanel {
 
@@ -21,7 +19,8 @@ public abstract class Game extends JPanel {
     private Inimigo inimigoBeholder;
     private Inimigo inimigoEstirge;
     private BufferedImage imagemJogador ,imagemInimigoArauto, imagemInimigoBeholder, imagemInimigoEstirge;
-    private int atacouFlag = 0;
+    private boolean atacouFlag = false;
+    private Mundo fases = new Fase(10, 1, "Fase 1", new Fase(3, 5, "Fase 3", new FimGame(), new FimGame()), new Fase(1, 10, "Fase 2", new FimGame(), new FimGame()));
 
     public Game() {
         KeyListener listener = new MyKeyListener();
@@ -53,7 +52,7 @@ public abstract class Game extends JPanel {
             	jogador.atacar2D(inimigoArauto);        
             	jogador.atacar2D(inimigoBeholder);        
             	jogador.atacar2D(inimigoEstirge);
-            	atacouFlag =1;
+            	atacouFlag = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_LEFT)
             	jogador.setX(jogador.getX() - 5);
@@ -71,7 +70,7 @@ public abstract class Game extends JPanel {
         @Override
         public void keyReleased(KeyEvent e) {
         	 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-        		 atacouFlag = 0;
+        		 atacouFlag = false;
         	 }
         }
         
@@ -96,7 +95,7 @@ public abstract class Game extends JPanel {
         g2d.drawString("Life Jogador: "+ jogador.getLife(), 20, 20);
         g2d.drawString("Inimigos restantes: "+ jogador.countObservers(), 20, 35);
         
-        if(atacouFlag==1) {
+        if(atacouFlag) {
         	g2d.drawString("Atacou", 20, 55);
         }
         else {
@@ -113,6 +112,10 @@ public abstract class Game extends JPanel {
 
         
     }
+    
+    public void jogarFases(Game game) throws Exception {
+    	this.fases.progredir(game);
+    }
 
     public void jogar(Game game) throws InterruptedException {
         
@@ -126,20 +129,24 @@ public abstract class Game extends JPanel {
         inimigoArauto = this.criarInimigo(1, 10, 450);
         inimigoBeholder = this.criarInimigo(2, 300,50);
         inimigoEstirge = this.criarInimigo(3, 450,250);
+        
 
         
         jogador.addObserver(inimigoArauto);
         jogador.addObserver(inimigoBeholder);
         jogador.addObserver(inimigoEstirge);
         
-
-      
         
-        while (jogador.getLife()!=0) {
-        	jogador.show();           
+        boolean flag = true;
+        while(flag) {
+        	if(jogador.getLife()==0 || jogador.countObservers()==0) {
+        		flag = false;
+        	}
+        	jogador.show();
             game.repaint();
             Thread.sleep(50);
         }
+        
     }
 }
 
