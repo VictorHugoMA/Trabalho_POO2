@@ -5,10 +5,13 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import controle.*;
 import personagens.*;
 import fases.*;
 
@@ -21,6 +24,7 @@ public abstract class Game extends JPanel {
     private BufferedImage imagemJogador ,imagemInimigoArauto, imagemInimigoBeholder, imagemInimigoEstirge;
     private boolean atacouFlag = false;
     private Mundo fases = new Fase(10, 1, "Fase 1", new Fase(3, 5, "Fase 3", new FimGame(), new FimGame()), new Fase(1, 10, "Fase 2", new FimGame(), new FimGame()));
+    private Controle c;
 
     public Game() {
         KeyListener listener = new MyKeyListener();
@@ -49,22 +53,24 @@ public abstract class Game extends JPanel {
         @Override
         public void keyPressed(KeyEvent e) {               
             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            	jogador.atacar2D(inimigoArauto);        
-            	jogador.atacar2D(inimigoBeholder);        
-            	jogador.atacar2D(inimigoEstirge);
+            	c.pressionar(4);
             	atacouFlag = true;
             }
             if (e.getKeyCode() == KeyEvent.VK_LEFT)
-            	jogador.setX(jogador.getX() - 5);
+            	c.pressionar(0);
             
             if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-            	jogador.setX(jogador.getX() + 5);
+            	c.pressionar(1);
 
             if (e.getKeyCode() == KeyEvent.VK_UP)
-            	jogador.setY(jogador.getY() - 5);
+            	c.pressionar(2);
 
             if (e.getKeyCode() == KeyEvent.VK_DOWN)
-            	jogador.setY(jogador.getY() + 5);
+            	c.pressionar(3);
+            
+            if (e.getKeyCode() == KeyEvent.VK_C)
+            	c.pressionar(5);
+
         }
 
         @Override
@@ -136,6 +142,27 @@ public abstract class Game extends JPanel {
         jogador.addObserver(inimigoBeholder);
         jogador.addObserver(inimigoEstirge);
         
+        ArrayList<Inimigo> inimigos= new ArrayList<Inimigo>();
+    	inimigos.add(inimigoArauto);
+    	inimigos.add(inimigoBeholder);
+    	inimigos.add(inimigoEstirge);
+        
+        c = new Controle();
+        c.setCommand(new MoverEsquerda(jogador),0);
+        c.setCommand(new MoverDireita(jogador),1);
+        
+        c.setCommand(new MoverCima(jogador),2);
+        c.setCommand(new MoverBaixo(jogador),3);
+        
+        c.setCommand(new Atacar2D(jogador, inimigos),4);
+        
+        Macro macroDashDireita = new Macro();
+        macroDashDireita.add(new MoverDireita(jogador));
+        macroDashDireita.add(new MoverDireita(jogador));
+        macroDashDireita.add(new MoverDireita(jogador));
+        macroDashDireita.add(new MoverDireita(jogador));
+ 
+        c.setCommand(macroDashDireita, 5);
         
         boolean flag = true;
         while(flag) {
@@ -146,7 +173,7 @@ public abstract class Game extends JPanel {
             game.repaint();
             Thread.sleep(50);
         }
-        
+        c.showLog();
     }
 }
 

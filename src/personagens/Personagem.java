@@ -1,5 +1,6 @@
 package personagens;
 import java.util.Observable;
+import java.util.Random;
 
 import comportamentos.*;
 import equipamentos.Escudo;
@@ -81,6 +82,22 @@ public class Personagem extends Observable {
 		this.setEscudo(null);
 	}
 	
+    public void moverEsquerda(){
+        this.setX(this.getX()-5);
+    }
+    
+    public void moverDireita(){
+        this.setX(this.getX()+5);
+    }
+    
+    public void moverCima(){
+        this.setY(this.getY()-5);
+    }
+
+    public void moverBaixo(){
+    	this.setY(this.getY()+5);
+    }
+	
 	public void setPosicao(int x, int y) {
 		this.setX(x);
 		this.setY(y);
@@ -92,6 +109,20 @@ public class Personagem extends Observable {
 	public void show() {
 		setChanged();
 		notifyObservers(this);
+	}
+	
+	public void atacar2D(Inimigo inimigo) {
+		if((Math.abs(this.getX() - inimigo.getX()) <=15) && (Math.abs(this.getY() - inimigo.getY()) <=15) ){  // <=15 para facilitar o acerto
+			System.out.println("Jogador atacou");
+			inimigo.perderLife(this.atacar());
+			int distanciaJogado = new Random().nextInt(150) + this.atacar();
+            inimigo.setPosicao(inimigo.getX()+ distanciaJogado, inimigo.getY() + distanciaJogado);
+            if(inimigo.getLife()==0) {
+            	this.deleteObserver(inimigo);
+            	System.out.println("Inimigo morreu");
+            }
+           
+        }
 	}
 	
 	public Corrida getCorrida() {
