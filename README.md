@@ -12,3 +12,4 @@ Utilizando vários Padrões de Projeto, são eles:
 - Abstract Factory
 - Singleton
 - Composite
+- Command
